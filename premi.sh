@@ -544,6 +544,24 @@ sed -i 's/\r//' limit-ip
 cd
 clear
 #SERVICE LIMIT ALL IP
+cat >/etc/systemd/system/sship.service << EOF
+[Unit]
+Description=Limit  Service
+Documentation=Dragon
+After=syslog.target network-online.target
+
+[Service]
+User=root
+NoNewPrivileges=true
+ExecStart=/usr/bin/limit-ip sship
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl restart sship
+systemctl enable sship
+
 cat >/etc/systemd/system/vmip.service << EOF
 [Unit]
 Description=My
